@@ -32,16 +32,38 @@ var Player = function(startX, startY) {
 
 		// Up key takes priority over down
 		if (keys.up) {
-			y -= moveAmount;
+					
+			if(y-moveAmount >= 0){
+				y -= moveAmount;			
+			}else{
+				//console.log('outer field');
+			}
+			
 		} else if (keys.down) {
-			y += moveAmount;
+						
+			if(y+moveAmount <= BATTLEFIELD_HEIGHT){
+				y += moveAmount;			
+			}else{
+				//console.log('outer field');
+			}
 		};
 
 		// Left key takes priority over right
 		if (keys.left) {
-			x -= moveAmount;
+			
+			if(x-moveAmount >= 0){
+				x -= moveAmount;			
+			}else{
+				//console.log('outer field');
+			}
+			
 		} else if (keys.right) {
-			x += moveAmount;
+						
+			if(x+moveAmount <= BATTLEFIELD_WIDTH){
+				x += moveAmount;			
+			}else{
+				//console.log('outer field');
+			}
 		};
 
 		return (prevX != x || prevY != y) ? true : false;
