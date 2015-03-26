@@ -1,7 +1,7 @@
 {
-  "name": "socket-chat-example",
+  "name": "simple_shooter",
   "version": "0.0.1",
-  "description": "my first socket.io app",
+  "description": "our simple 2d shooter",
   "dependencies": {
     "express": "^4.10.2",
     "socket.io": "^1.3.5"
