@@ -24,6 +24,19 @@ var Keys = function(up, left, right, down) {
 			case 40: // Down
 				that.down = true;
 				break;
+			//WASD
+			case 65: // Left
+				that.left = true;
+				break;
+			case 87: // Up
+				that.up = true;
+				break;
+			case 68: // Right
+				that.right = true; // Will take priority over the left key
+				break;
+			case 83: // Down
+				that.down = true;
+				break;
 		};
 	};
 	
@@ -41,6 +54,19 @@ var Keys = function(up, left, right, down) {
 				that.right = false;
 				break;
 			case 40: // Down
+				that.down = false;
+				break;
+			//WASD
+			case 65: // Left
+				that.left = false;
+				break;
+			case 87: // Up
+				that.up = false;
+				break;
+			case 68: // Right
+				that.right = false;
+				break;
+			case 83: // Down
 				that.down = false;
 				break;
 		};
