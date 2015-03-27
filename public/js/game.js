@@ -55,6 +55,8 @@ var setEventHandlers = function() {
 
 	// Window resize
 	window.addEventListener("resize", onResize, false);
+	
+	document.getElementById("battlefield").addEventListener("click", mouseFire, false);
 
 	// Socket connection successful
 	socket.on("connect", onSocketConnected);
@@ -115,8 +117,6 @@ function getOffsetRect(elem) {
     return { top: Math.round(top), left: Math.round(left) };
 }
 
-var fieldcoord = getOffset(document.getElementById('battlefield'));
-console.log('fieldcoord.top: ' + fieldcoord.top + ' fieldcoord.left: '+fieldcoord.left);
 
 // Keyboard key down
 function onKeydown(e) {
@@ -148,9 +148,42 @@ function onKeyup(e) {
 	};
 };
 
-function fire(){
-	console.log('fire from: X:'+localPlayer.getX()+' Y: '+localPlayer.getY());
+function mouseFire(event){
 	
+    
+    //field coordinate
+	var fieldcoord = getOffset(document.getElementById('battlefield'));
+
+	//launcher
+	var launcherX = localPlayer.getX()+fieldcoord.left;
+	var launcherY = localPlayer.getY()+ fieldcoord.top;
+	
+	//target
+	var targetX = event.pageX;
+	var targetY = event.pageY;
+	
+	var relativeX = targetX - launcherX;
+    var relativeY = targetY - launcherY;
+ 
+    var radians = Math.atan2(relativeY, relativeX);
+ 
+    console.log('launch new bullet with x: ' + localPlayer.getX() + ' y: ' + localPlayer.getY() + ' radians: ' + radians);
+
+	// Send new bullet data to the game server  
+	socket.emit("new bullet", {x: localPlayer.getX(), y: localPlayer.getY(), radians: radians});
+    	    
+	//console.log('fire from: absX:'+(localPlayer.getX()+fieldcoord.left)+' absY: '+(localPlayer.getY()+ fieldcoord.top));
+    //var cX = event.clientX;
+    //var cY = event.clientY;
+    //console.log("to absX: " + cX + ", to absY: " + cY);
+    //console.log("to absX2: " + event.pageX + ", to absY2: " + event.pageY);  
+}
+
+function fire(){
+	var fieldcoord = getOffset(document.getElementById('battlefield'));
+	
+	console.log('fire from: absX:'+(localPlayer.getX()+fieldcoord.left)+' absY: '+(localPlayer.getY()+ fieldcoord.top));
+	//console.log('fieldcoord.top: ' + fieldcoord.top + ' fieldcoord.left: '+fieldcoord.left);	
 }
 
 // Browser window resize

@@ -27,8 +27,8 @@ var util = require("util"),					// Utility resources (logging, object inspection
 ** GAME VARIABLES
 **************************************************/
 var socket,		// Socket controller
-	players;	// Array of connected players
-
+	players,	// Array of connected players
+	bullets;	// Array of bullets
 
 /**************************************************
 ** GAME INITIALISATION
@@ -36,6 +36,9 @@ var socket,		// Socket controller
 function init() {
 	// Create an empty array to store players
 	players = [];
+
+	// Create an empty array to bullets
+	bullets = [];
 
 	// Set up Socket.IO to listen on port 8000
 	/*socket = io.listen(1253);*/
@@ -80,6 +83,10 @@ function onSocketConnection(client) {
 
 	// Listen for move player message
 	client.on("move player", onMovePlayer);
+
+	// Listen for new bullets message
+	client.on("new bullet", onNewBullet);
+	
 };
 
 // Socket client has disconnected
