@@ -15,6 +15,13 @@ http.listen(1253, function(){
   console.log('listening on *:1253');
 });
 
+var consts = require(__dirname +'/public/js/constants.js');
+//console.log('BATTLEFIELD_WIDTH: '+ consts.BATTLEFIELD_WIDTH);
+
+//BATTLEFIELD
+var BATTLEFIELD_WIDTH=consts.BATTLEFIELD_WIDTH;
+var BATTLEFIELD_HEIGHT=consts.BATTLEFIELD_HEIGHT;
+
 /**************************************************
 ** NODE.JS REQUIREMENTS
 **************************************************/

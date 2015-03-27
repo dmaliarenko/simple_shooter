@@ -5,6 +5,13 @@ var Bullet = function(startX, startY, radians) {
 	var x = startX,
 		y = startY,
 		radians = radians;
+	
+	var step = 2; //one 4 all - one speed for bullets
+	var radius = 4;
+	
+	//delta individual (зависит от наклона)	
+	var deltaX	= Math.cos(radians) * step;
+	var deltaY = Math.sin(radians) * step;
 
 	// Getters and setters
 	var getX = function() {
@@ -13,10 +20,6 @@ var Bullet = function(startX, startY, radians) {
 
 	var getY = function() {
 		return y;
-	};
-	
-	var getRadians = function() {
-		return radians;
 	};
 	
 	var setX = function(newX) {
