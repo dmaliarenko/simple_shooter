@@ -34,8 +34,8 @@ function init() {
 	localPlayer = new Player(startX, startY);
 
 	// Initialise socket connection
-	socket = io.connect("http://localhost", {port: 1253, transports: ["websocket"]});
-	
+	//socket = io.connect("http://localhost", {port: 1253, transports: ["websocket"]});
+	socket = io();
 
 	// Initialise remote players array
 	remotePlayers = [];
