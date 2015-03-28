@@ -3,6 +3,7 @@ var app = express();
 //var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var os = require('os');
 
 // Routing
 app.use(express.static(__dirname + '/public'));
@@ -12,15 +13,15 @@ app.get('/', function (req, res) {
 });
 
 http.listen(1253, function(){
-  console.log('listening on *:1253');
+  console.log('listening on *:1253; hostname: ' + os.hostname());
 });
 
-var consts = require(__dirname +'/public/js/constants.js');
+var constants = require(__dirname +'/public/js/constants.js');
 //console.log('BATTLEFIELD_WIDTH: '+ consts.BATTLEFIELD_WIDTH);
 
 //BATTLEFIELD
-var BATTLEFIELD_WIDTH=consts.BATTLEFIELD_WIDTH;
-var BATTLEFIELD_HEIGHT=consts.BATTLEFIELD_HEIGHT;
+var BATTLEFIELD_WIDTH=constants.BATTLEFIELD_WIDTH;
+var BATTLEFIELD_HEIGHT=constants.BATTLEFIELD_HEIGHT;
 
 /**************************************************
 ** NODE.JS REQUIREMENTS
@@ -28,7 +29,7 @@ var BATTLEFIELD_HEIGHT=consts.BATTLEFIELD_HEIGHT;
 var util = require("util"),					// Utility resources (logging, object inspection, etc)
 	//io = require("socket.io"),				// Socket.IO
 	Player = require("./Player").Player;	// Player class
-
+var Bullet = require("./Bullet").Bullet;
 
 /**************************************************
 ** GAME VARIABLES
@@ -81,6 +82,7 @@ var setEventHandlers = function() {
 // New socket connection
 function onSocketConnection(client) {
 	util.log("New player has connected: "+client.id);
+	//console.log("New player has connected: "+ JSON.stringify(client.handshake.headers));
 
 	// Listen for client disconnected
 	client.on("disconnect", onClientDisconnect);
@@ -94,6 +96,16 @@ function onSocketConnection(client) {
 	// Listen for new bullets message
 	client.on("new bullet", onNewBullet);
 	
+	//tracing();
+	
+	/*function tracing(){
+		setTimeout(tracing, 200);
+		// Broadcast updated bullets position to connected socket clients
+		//this.broadcast.emit("update bullets", JSON.stringify(bullets));
+		io.sockets.emit("update bullets", {id: 1});
+		console.log("update bullets");
+
+	}*/
 };
 
 // Socket client has disconnected
@@ -135,6 +147,18 @@ function onNewPlayer(data) {
 	players.push(newPlayer);
 };
 
+// New Bullet launch
+function onNewBullet(data) {
+	console.log('new buller create');
+	// Create a new Bullet
+	var newBullet = new Bullet(data.x, data.y, data.radians);
+	newBullet.author = this.id;
+		
+	// Add new bullet to the bullets array
+	bullets.push(newBullet);
+	//console.log(JSON.stringify(bullets));	
+};
+
 // Player has moved
 function onMovePlayer(data) {
 	// Find player in array
@@ -153,6 +177,18 @@ function onMovePlayer(data) {
 	// Broadcast updated position to connected socket clients
 	this.broadcast.emit("move player", {id: movePlayer.id, x: movePlayer.getX(), y: movePlayer.getY()});
 };
+
+function physics() {
+	setTimeout(physics, 20);
+	move_bullets();
+}
+
+function move_bullets(){
+	//bullets physics
+	for (var i = 0; i < bullets.length; i++) {
+		bullets[i].doStep;
+	};	
+}
 
 
 /**************************************************
@@ -174,3 +210,5 @@ function playerById(id) {
 ** RUN THE GAME
 **************************************************/
 init();
+//physics();//like bullet moving
+//tracing();
