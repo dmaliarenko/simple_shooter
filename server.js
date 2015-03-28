@@ -47,6 +47,7 @@ function init() {
 
 	// Create an empty array to bullets
 	bullets = [];
+	var bullet_tracing=[];
 
 	// Set up Socket.IO to listen on port 8000
 	/*socket = io.listen(1253);*/
@@ -184,13 +185,29 @@ function physics() {
 }
 
 function move_bullets(){
+	//обнуляем трайсинг пуль
+	bullet_tracing =[];
+	
 	//bullets physics
 	for (var i = 0; i < bullets.length; i++) {
-		bullets[i].doStep;
+		
+		//bullets[i].doStep();
+		bullets[i].doStep();
+		bullet_tracing.push({author: bullets[i].author, x: bullets[i].getX(), y: bullets[i].getY()});		
+		//console.log('bullets[i].doStep: x: ' + ball.getX() + ' y: '+ ball.getY());		
 	};	
 }
 
+	//tracing();
+	
+	function tracing(){
+		setTimeout(tracing, 200);
+		// Broadcast updated bullets position to connected socket clients
+		//this.broadcast.emit("update bullets", JSON.stringify(bullets));
+		io.sockets.emit("update bullets", JSON.stringify(bullet_tracing));
+		//console.log("update bullets");
 
+	}
 /**************************************************
 ** GAME HELPER FUNCTIONS
 **************************************************/
@@ -210,5 +227,5 @@ function playerById(id) {
 ** RUN THE GAME
 **************************************************/
 init();
-//physics();//like bullet moving
-//tracing();
+physics();//like bullet moving
+tracing();

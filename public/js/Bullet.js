@@ -1,17 +1,11 @@
 /**************************************************
 ** GAME BULLET CLASS
 **************************************************/
-var Bullet = function(startX, startY, targetX, targetY) {
+var Bullet = function(startX, startY) {
 	var x = startX,
 		y = startY,
 		
-		sx = startX,
-		sy = startY,
-		tx = targetX,
-		ty = targetY,
-		
-		id,
-		moveAmount = 2;
+		author;
 	
 	// Getters and setters
 	var getX = function() {
@@ -30,11 +24,9 @@ var Bullet = function(startX, startY, targetX, targetY) {
 		y = newY;
 	};
 
-
-
 	// Draw bullet
 	var draw = function(ctx) {
-		ctx.fillStyle="#FF0000";
+		ctx.fillStyle="red";
 		ctx.fillRect(x-2, y-2, 4, 4);
 	};
 
@@ -44,6 +36,7 @@ var Bullet = function(startX, startY, targetX, targetY) {
 		getY: getY,
 		setX: setX,
 		setY: setY,
-		draw: draw
+		draw: draw,
+		author:author
 	}
 };

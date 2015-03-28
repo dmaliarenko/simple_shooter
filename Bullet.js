@@ -8,8 +8,8 @@ var Bullet = function(startX, startY, radians) {
 	
 	var x = startX,
 		y = startY,
-		traseX = x, //detection x ~ real x
-		traseY = y, //detection y ~ real y
+		traceX = x, //detection x ~ real x
+		traceY = y, //detection y ~ real y
 		
 		radians = radians,
 		radius = constants.BULLET_RADIUS,
@@ -57,8 +57,8 @@ var Bullet = function(startX, startY, radians) {
 			y = 2 * (constants.BATTLEFIELD_HEIGHT - radius) - y;
 		}
 		
-		traseX = x;
-		traseY = y;
+		traceX = x;
+		traceY = y;
 				
 	};	
 
@@ -68,9 +68,10 @@ var Bullet = function(startX, startY, radians) {
 		getY: getY,
 		getRadius:getRadius,
 		author:author,
-		traseX: traseX,
-		traseY: traseY,
-		traceRadius: traceRadius
+		traceX: traceX,
+		traceY: traceY,
+		traceRadius: traceRadius,
+		doStep:doStep
 	}
 };
 

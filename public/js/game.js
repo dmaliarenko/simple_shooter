@@ -6,6 +6,7 @@ var canvas,			// Canvas DOM element
 	keys,			// Keyboard input
 	localPlayer,	// Local player
 	remotePlayers,	// Remote players
+	remoteBullets,
 	socket;			// Socket connection
 
 
@@ -245,11 +246,31 @@ function onMovePlayer(data) {
 
 // Update bullets
 function onUpdateBullets(data) {
-	var bulletlist = JSON.parse(data);
+	//здесь убить все предыдущие пули
+	remoteBullets=[];
 	
-	for (i in bulletlist){
-		console.log(bulletlist[i].author);
-	};
+	var bulletlist = JSON.parse(data);
+	console.log(data);
+	
+	
+	bulletlist.forEach(create_bullet);
+	
+	function create_bullet(bullet, i, bulletlist) {
+		console.log('bullet x:'+ bullet.x + '; y: ' + bullet.y + '; author: ' + bullet.author);
+		
+		// Initialise the new bullet
+		var newBullet = new Bullet(bullet.x, bullet.y);
+		newBullet.author = bullet.author;
+
+		// Add new player to the remote players array
+		remoteBullets.push(newBullet);			
+	}
+
+	
+	/*for (i in bulletlist){
+		console.log('x: 'bulletlist[i].x + ' y: ' + bulletlist[i].y);
+		//console.log('onUpdateBullets'+JSON.parse(data));
+	};*/
 };
 
 // Remove player
@@ -306,6 +327,12 @@ function draw() {
 	for (i = 0; i < remotePlayers.length; i++) {
 		remotePlayers[i].draw(ctx);
 	};
+
+	remoteBullets.forEach(draw_bullet);	
+	function draw_bullet(bullet, i, remoteBullets) {
+		bullet.draw(ctx);
+	}
+	
 };
 
 
