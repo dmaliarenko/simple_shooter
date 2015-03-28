@@ -4,7 +4,7 @@
 var Bullet = function(startX, startY, radians) {
 	
 	var constants = require(__dirname +'/public/js/constants.js');
-	console.log('BATTLEFIELD_WIDTH: '+ constants.BATTLEFIELD_WIDTH);
+	//console.log('BATTLEFIELD_WIDTH: '+ constants.BATTLEFIELD_WIDTH);
 	
 	var x = startX,
 		y = startY,

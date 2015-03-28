@@ -150,7 +150,7 @@ function onNewPlayer(data) {
 
 // New Bullet launch
 function onNewBullet(data) {
-	console.log('new buller create');
+	//console.log('new buller create');
 	// Create a new Bullet
 	var newBullet = new Bullet(data.x, data.y, data.radians);
 	newBullet.author = this.id;
@@ -193,7 +193,18 @@ function move_bullets(){
 		
 		//bullets[i].doStep();
 		bullets[i].doStep();
-		bullet_tracing.push({author: bullets[i].author, x: bullets[i].getX(), y: bullets[i].getY()});		
+		bullet_tracing.push({author: bullets[i].author, x: bullets[i].getX(), y: bullets[i].getY()});
+		
+		players.forEach(collision);
+		function collision(player, j, players) {
+				//console.log("player.getX(): "+ player.getX() + ' bullets[i].getX(): ' + bullets[i].getX());
+			if(((player.getX() <= (bullets[i].getX()+10)) &&
+			 (player.getX() >= (bullets[i].getX()-10))) &&
+			  ((player.getY() <= (bullets[i].getY()+10)) &&
+			   (player.getY() >= (bullets[i].getY()-10)))){
+				console.log("попадание");
+			};	
+		}		
 		//console.log('bullets[i].doStep: x: ' + ball.getX() + ' y: '+ ball.getY());		
 	};	
 }

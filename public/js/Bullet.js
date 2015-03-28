@@ -26,8 +26,16 @@ var Bullet = function(startX, startY) {
 
 	// Draw bullet
 	var draw = function(ctx) {
-		ctx.fillStyle="red";
-		ctx.fillRect(x-2, y-2, 4, 4);
+		//ctx.fillStyle="red";
+		//ctx.fillRect(x-2, y-2, 4, 4);
+		
+      ctx.beginPath();
+      ctx.arc(x, y, 4, 0, 2 * Math.PI, false);
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = 'red';
+      ctx.stroke();
+      ctx.closePath();
+	
 	};
 
 	// Define which variables and methods can be accessed

@@ -71,6 +71,8 @@ var Player = function(startX, startY) {
 
 	// Draw player
 	var draw = function(ctx) {
+		ctx.beginPath();
+		ctx.fillStyle = 'black';
 		ctx.fillRect(x-5, y-5, 10, 10);
 	};
 
