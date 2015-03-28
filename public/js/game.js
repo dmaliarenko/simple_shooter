@@ -18,8 +18,8 @@ function init() {
 	ctx = canvas.getContext("2d");
 
 	// Maximise the canvas
-	canvas.width = BATTLEFIELD_WIDTH;
-	canvas.height = BATTLEFIELD_HEIGHT;
+	canvas.width = constants.BATTLEFIELD_WIDTH;
+	canvas.height = constants.BATTLEFIELD_HEIGHT;
 
 	// Initialise keyboard controls
 	keys = new Keys();
@@ -40,6 +40,9 @@ function init() {
 	// Initialise remote players array
 	remotePlayers = [];
 
+	// Initialise bullets array
+	remoteBullets = [];
+	
 	// Start listening for events
 	setEventHandlers();
 };
@@ -72,6 +75,9 @@ var setEventHandlers = function() {
 
 	// Player removed message received
 	socket.on("remove player", onRemovePlayer);
+
+	// Bullets update message received
+	socket.on("update bullets", onUpdateBullets);
 };
 
 //for absolute element position
@@ -149,8 +155,7 @@ function onKeyup(e) {
 };
 
 function mouseFire(event){
-	
-    
+
     //field coordinate
 	var fieldcoord = getOffset(document.getElementById('battlefield'));
 
@@ -191,14 +196,16 @@ function onResize(e) {
 	// Maximise the canvas
 	//canvas.width = 0.9*window.innerWidth;
 	//canvas.height = 0.9*window.innerHeight;
-	canvas.width = BATTLEFIELD_WIDTH;
-	canvas.height = BATTLEFIELD_HEIGHT;	
+	canvas.width = constants.BATTLEFIELD_WIDTH;
+	canvas.height = constants.BATTLEFIELD_HEIGHT;	
 	
 };
 
 // Socket connected
 function onSocketConnected() {
 	console.log("Connected to socket server");
+	//var os = require('os');
+	//console.log("Connected"+ hostname());
 
 	// Send local player data to the game server
 	socket.emit("new player", {x: localPlayer.getX(), y: localPlayer.getY()});
@@ -234,6 +241,15 @@ function onMovePlayer(data) {
 	// Update player position
 	movePlayer.setX(data.x);
 	movePlayer.setY(data.y);
+};
+
+// Update bullets
+function onUpdateBullets(data) {
+	var bulletlist = JSON.parse(data);
+	
+	for (i in bulletlist){
+		console.log(bulletlist[i].author);
+	};
 };
 
 // Remove player

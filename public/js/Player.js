@@ -41,7 +41,7 @@ var Player = function(startX, startY) {
 			
 		} else if (keys.down) {
 						
-			if(y+moveAmount <= BATTLEFIELD_HEIGHT){
+			if(y+moveAmount <= constants.BATTLEFIELD_HEIGHT){
 				y += moveAmount;			
 			}else{
 				//console.log('outer field');
@@ -59,7 +59,7 @@ var Player = function(startX, startY) {
 			
 		} else if (keys.right) {
 						
-			if(x+moveAmount <= BATTLEFIELD_WIDTH){
+			if(x+moveAmount <= constants.BATTLEFIELD_WIDTH){
 				x += moveAmount;			
 			}else{
 				//console.log('outer field');

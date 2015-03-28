@@ -2,12 +2,24 @@
 ** GAME BULLET CLASS
 **************************************************/
 var Bullet = function(startX, startY, radians) {
+	
+	var constants = require(__dirname +'/public/js/constants.js');
+	console.log('BATTLEFIELD_WIDTH: '+ constants.BATTLEFIELD_WIDTH);
+	
 	var x = startX,
 		y = startY,
-		radians = radians;
+		traseX = x, //detection x ~ real x
+		traseY = y, //detection y ~ real y
+		
+		radians = radians,
+		radius = constants.BULLET_RADIUS,
+		traceRadius = radius,
+		author;
+		
+		
 	
-	var step = 2; //one 4 all - one speed for bullets
-	var radius = 4;
+	var step = constants.BULLET_STEP; //one 4 all - one speed for bullets
+	var radius = constants.BULLET_RADIUS;
 	
 	//delta individual (зависит от наклона)	
 	var deltaX	= Math.cos(radians) * step;
@@ -22,25 +34,43 @@ var Bullet = function(startX, startY, radians) {
 		return y;
 	};
 	
-	var setX = function(newX) {
-		x = newX;
+	var getRadius = function() {
+		return radius;
 	};
+	
+	var doStep = function() {
+		x += deltaX;
+		y += deltaY;
 
-	var setY = function(newY) {
-		y = newY;
-	};
-
-	var doingStep = function(step) {
+		if (x < radius) {
+			deltaX = -deltaX;
+			x = 2 * (radius) - x;
+		} else if (x > constants.BATTLEFIELD_WIDTH - radius) {
+			deltaX = -deltaX;
+			x = 2 * (constants.BATTLEFIELD_WIDTH - radius) - x;
+		}
+		if (y < radius) {
+			deltaY = -deltaY;
+			y = 2 * (radius) - y;
+		} else if (y > constants.BATTLEFIELD_HEIGHT - radius) {
+			deltaY = -deltaY;
+			y = 2 * (constants.BATTLEFIELD_HEIGHT - radius) - y;
+		}
 		
+		traseX = x;
+		traseY = y;
+				
 	};	
 
 	// Define which variables and methods can be accessed
 	return {
 		getX: getX,
 		getY: getY,
-		setX: setX,
-		setY: setY,
-		getRadians: getRadians,
+		getRadius:getRadius,
+		author:author,
+		traseX: traseX,
+		traseY: traseY,
+		traceRadius: traceRadius
 	}
 };
 
