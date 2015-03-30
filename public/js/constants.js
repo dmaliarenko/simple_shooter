@@ -8,7 +8,7 @@
  	var BATTLEFIELD_WIDTH = 900;
 	var BATTLEFIELD_HEIGHT = 500;
 	var BULLET_RADIUS =  4;
-	var BULLET_STEP = 3;  
+	var BULLET_STEP = 15;  
 
 	//code for server side
 	exports.BATTLEFIELD_WIDTH = BATTLEFIELD_WIDTH;

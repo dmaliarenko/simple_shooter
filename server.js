@@ -180,13 +180,15 @@ function onMovePlayer(data) {
 };
 
 function physics() {
-	setTimeout(physics, 20);
+	setTimeout(physics, 15);
 	move_bullets();
 }
 
 function move_bullets(){
 	//обнуляем трайсинг пуль
-	bullet_tracing =[];
+	bullet_tracing = [];
+	
+	var dead_bullet_list = []; //лист с индексами пуль, которые должны быть уничтожены после поражения цели (удаление после прохождения цикла).
 	
 	//bullets physics
 	for (var i = 0; i < bullets.length; i++) {
@@ -198,15 +200,31 @@ function move_bullets(){
 		players.forEach(collision);
 		function collision(player, j, players) {
 				//console.log("player.getX(): "+ player.getX() + ' bullets[i].getX(): ' + bullets[i].getX());
-			if(((player.getX() <= (bullets[i].getX()+10)) && (player.getX() >= (bullets[i].getX()-10))) &&
-			   ((player.getY() <= (bullets[i].getY()+10)) && (player.getY() >= (bullets[i].getY()-10)))){
-				   
+			if( ((typeof bullet_tracing !== 'undefined' && bullet_tracing.length > 0)) &&
+				((player.getX() <= (bullets[i].getX()+10)) && (player.getX() >= (bullets[i].getX()-10))) &&
+				((player.getY() <= (bullets[i].getY()+10)) && (player.getY() >= (bullets[i].getY()-10)))){
+				
+				//for destroin bullet
+				//здесь сразу нельзя убить пулю (нельзя просто удалить с массива - т.к. мы в цикле: во-первых надо пройтись по всем остальным игрокам и сравнить с bullets[i].getX() например, во-вторых, нам надо продолжать дальше цикл по bullets.length)
+				
+				//вносим пулю в список для уничтожения
+				dead_bullet_list.push(i);
+				
+				//тут бы надо фиксировать death; suicide; frag
+				
+				//это удалить: чисто для тестирования
 				var d = new Date();
 				console.log("попадание: "+d.getTime());
 			};	
-		}		
+		}				
 		//console.log('bullets[i].doStep: x: ' + ball.getX() + ' y: '+ ball.getY());		
-	};	
+	};
+	
+	//exterminatus foreach bullet in dead_bullet_list
+	dead_bullet_list.forEach(bullet_extermination);
+	function bullet_extermination (item, n, dead_bullet_list){
+		bullets.splice(item,1);		
+	}	
 }
 
 	//tracing();
