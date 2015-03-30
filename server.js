@@ -185,8 +185,6 @@ function physics() {
 }
 
 function move_bullets(){
-	//обнуляем трайсинг пуль
-	bullet_tracing = [];
 	
 	var dead_bullet_list = []; //лист с индексами пуль, которые должны быть уничтожены после поражения цели (удаление после прохождения цикла).
 	
@@ -195,7 +193,7 @@ function move_bullets(){
 		
 		//bullets[i].doStep();
 		bullets[i].doStep();
-		bullet_tracing.push({author: bullets[i].author, x: bullets[i].getX(), y: bullets[i].getY()});
+		//bullet_tracing.push({author: bullets[i].author, x: bullets[i].getX(), y: bullets[i].getY()});
 		
 		players.forEach(collision);
 		function collision(player, j, players) {
@@ -229,17 +227,30 @@ function move_bullets(){
 	//exterminatus foreach bullet in dead_bullet_list
 	dead_bullet_list.forEach(bullet_extermination);
 	function bullet_extermination (item, n, dead_bullet_list){
-		bullets.splice(item,1);		
-	}	
+		bullets.splice(item,1);
+		tracing();
+		io.sockets.emit("update bullets", JSON.stringify(bullet_tracing));		
+	}
 }
 
-	//tracing();
-	
+	//
+
 	function tracing(){
-		setTimeout(tracing, 100);
+		//обнуляем трайсинг пуль
+		bullet_tracing = [];
+				
+		for (var i = 0; i < bullets.length; i++) {
+			bullet_tracing.push({author: bullets[i].author, x: bullets[i].getX(), y: bullets[i].getY()});		
+		};
+		//io.sockets.emit("update bullets", JSON.stringify(bullet_tracing));
+	}
+	
+	function update_tracing(){
+		setTimeout(update_tracing, 33);
+		tracing();			
 		// Broadcast updated bullets position to connected socket clients
 		//only if exist
-		if (typeof bullet_tracing !== 'undefined' && bullet_tracing.length > 0) {
+		if (typeof bullet_tracing !== 'undefined' && bullet_tracing.length > 0) {		
 			io.sockets.emit("update bullets", JSON.stringify(bullet_tracing));    
 		}
 	}
@@ -263,4 +274,4 @@ function playerById(id) {
 **************************************************/
 init();
 physics();//like bullet moving
-tracing();
+update_tracing();

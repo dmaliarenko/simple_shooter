@@ -262,6 +262,7 @@ function onMovePlayer(data) {
 
 // Update bullets
 function onUpdateBullets(data) {
+	
 	//здесь убить все предыдущие пули
 	remoteBullets=[];
 	
