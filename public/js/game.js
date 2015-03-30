@@ -173,12 +173,26 @@ function mouseFire(event){
     var relativeY = targetY - launcherY;
  
     var radians = Math.atan2(relativeY, relativeX);
-    var GRADUS = radians * 180 / Math.PI;
+    
+    //перед тем как отправить новую пулю мы должны сделать ее нулевой шаг, чтоб выйти из зоны игрока (step == R+~1)
+		
+		//в качестве первоначальных принимаем координаты стрелка
+		var startX = localPlayer.getX();
+		var startY = localPlayer.getY();
 
-    console.log('launch new bullet with GRADUS: ' + GRADUS +';  x: ' + localPlayer.getX() + ' y: ' + localPlayer.getY() + ' radians: ' + radians);
+		//нулевой шаг зависит от угла наклона запуска	
+		var deltaX	= Math.cos(radians) * (localPlayer.getRadius()+2);
+		var deltaY = Math.sin(radians) * (localPlayer.getRadius()+2);
+
+
+		startX += deltaX;
+		startY += deltaY;
+   
+    //var GRADUS = radians * 180 / Math.PI;
+    //console.log('launch new bullet with GRADUS: ' + GRADUS +';  x: ' + localPlayer.getX() + ' y: ' + localPlayer.getY() + ' radians: ' + radians);
 
 	// Send new bullet data to the game server  
-	socket.emit("new bullet", {x: localPlayer.getX(), y: localPlayer.getY(), radians: radians});
+	socket.emit("new bullet", {x: startX, y: startY, radians: radians});
     	    
 	//console.log('fire from: absX:'+(localPlayer.getX()+fieldcoord.left)+' absY: '+(localPlayer.getY()+ fieldcoord.top));
     //var cX = event.clientX;
