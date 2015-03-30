@@ -15,7 +15,7 @@
 	var BULLET_STEP = 15;
 	
 	//PLAYER
-	var PLAYER_RADIUS = 10; //default
+	var PLAYER_RADIUS = 30; //default
 	 
 
 //code for server side

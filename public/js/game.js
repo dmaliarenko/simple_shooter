@@ -173,8 +173,9 @@ function mouseFire(event){
     var relativeY = targetY - launcherY;
  
     var radians = Math.atan2(relativeY, relativeX);
- 
-    console.log('launch new bullet with x: ' + localPlayer.getX() + ' y: ' + localPlayer.getY() + ' radians: ' + radians);
+    var GRADUS = radians * 180 / Math.PI;
+
+    console.log('launch new bullet with GRADUS: ' + GRADUS +';  x: ' + localPlayer.getX() + ' y: ' + localPlayer.getY() + ' radians: ' + radians);
 
 	// Send new bullet data to the game server  
 	socket.emit("new bullet", {x: localPlayer.getX(), y: localPlayer.getY(), radians: radians});
@@ -257,7 +258,7 @@ function onUpdateBullets(data) {
 	bulletlist.forEach(create_bullet);
 	
 	function create_bullet(bullet, i, bulletlist) {
-		console.log('bullet x:'+ bullet.x + '; y: ' + bullet.y + '; author: ' + bullet.author);
+		//console.log('bullet x:'+ bullet.x + '; y: ' + bullet.y + '; author: ' + bullet.author);
 		
 		// Initialise the new bullet
 		var newBullet = new Bullet(bullet.x, bullet.y);
