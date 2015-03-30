@@ -198,11 +198,11 @@ function move_bullets(){
 		players.forEach(collision);
 		function collision(player, j, players) {
 				//console.log("player.getX(): "+ player.getX() + ' bullets[i].getX(): ' + bullets[i].getX());
-			if(((player.getX() <= (bullets[i].getX()+10)) &&
-			 (player.getX() >= (bullets[i].getX()-10))) &&
-			  ((player.getY() <= (bullets[i].getY()+10)) &&
-			   (player.getY() >= (bullets[i].getY()-10)))){
-				console.log("попадание");
+			if(((player.getX() <= (bullets[i].getX()+10)) && (player.getX() >= (bullets[i].getX()-10))) &&
+			   ((player.getY() <= (bullets[i].getY()+10)) && (player.getY() >= (bullets[i].getY()-10)))){
+				   
+				var d = new Date();
+				console.log("попадание: "+d.getTime());
 			};	
 		}		
 		//console.log('bullets[i].doStep: x: ' + ball.getX() + ' y: '+ ball.getY());		
@@ -212,12 +212,12 @@ function move_bullets(){
 	//tracing();
 	
 	function tracing(){
-		setTimeout(tracing, 200);
+		setTimeout(tracing, 100);
 		// Broadcast updated bullets position to connected socket clients
-		//this.broadcast.emit("update bullets", JSON.stringify(bullets));
-		io.sockets.emit("update bullets", JSON.stringify(bullet_tracing));
-		//console.log("update bullets");
-
+		//only if exist
+		if (typeof bullet_tracing !== 'undefined' && bullet_tracing.length > 0) {
+			io.sockets.emit("update bullets", JSON.stringify(bullet_tracing));    
+		}
 	}
 /**************************************************
 ** GAME HELPER FUNCTIONS

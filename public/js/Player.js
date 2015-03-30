@@ -72,8 +72,15 @@ var Player = function(startX, startY) {
 	// Draw player
 	var draw = function(ctx) {
 		ctx.beginPath();
-		ctx.fillStyle = 'black';
-		ctx.fillRect(x-5, y-5, 10, 10);
+		//ctx.fillStyle = 'black';
+		//ctx.fillRect(x-5, y-5, 10, 10);
+		
+		ctx.fillStyle = "black";
+		ctx.beginPath();
+		ctx.arc(x,y,5,0,Math.PI*2,true);
+		ctx.closePath();
+		ctx.fill();
+
 	};
 
 	// Define which variables and methods can be accessed
