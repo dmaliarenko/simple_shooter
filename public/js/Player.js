@@ -5,7 +5,8 @@ var Player = function(startX, startY) {
 	var x = startX,
 		y = startY,
 		id,
-		moveAmount = 2;
+		radius = constants.PLAYER_RADIUS, //default radius
+		moveAmount = 3;
 	
 	// Getters and setters
 	var getX = function() {
@@ -15,7 +16,11 @@ var Player = function(startX, startY) {
 	var getY = function() {
 		return y;
 	};
-
+	
+	var getRadius = function() {
+		return radius;
+	};
+	
 	var setX = function(newX) {
 		x = newX;
 	};
@@ -24,6 +29,10 @@ var Player = function(startX, startY) {
 		y = newY;
 	};
 
+	var setRadius = function(newRadius) {
+		radius = newRadius;
+	};
+	
 	// Update player position
 	var update = function(keys) {
 		// Previous position
@@ -33,7 +42,7 @@ var Player = function(startX, startY) {
 		// Up key takes priority over down
 		if (keys.up) {
 					
-			if(y-moveAmount >= 0){
+			if(y-radius-moveAmount >= 0){
 				y -= moveAmount;			
 			}else{
 				//console.log('outer field');
@@ -41,7 +50,7 @@ var Player = function(startX, startY) {
 			
 		} else if (keys.down) {
 						
-			if(y+moveAmount <= constants.BATTLEFIELD_HEIGHT){
+			if(y+radius+moveAmount <= constants.BATTLEFIELD_HEIGHT){
 				y += moveAmount;			
 			}else{
 				//console.log('outer field');
@@ -51,7 +60,7 @@ var Player = function(startX, startY) {
 		// Left key takes priority over right
 		if (keys.left) {
 			
-			if(x-moveAmount >= 0){
+			if(x-radius-moveAmount >= 0){
 				x -= moveAmount;			
 			}else{
 				//console.log('outer field');
@@ -59,7 +68,7 @@ var Player = function(startX, startY) {
 			
 		} else if (keys.right) {
 						
-			if(x+moveAmount <= constants.BATTLEFIELD_WIDTH){
+			if(x+radius+moveAmount <= constants.BATTLEFIELD_WIDTH){
 				x += moveAmount;			
 			}else{
 				//console.log('outer field');
@@ -77,7 +86,7 @@ var Player = function(startX, startY) {
 		
 		ctx.fillStyle = "black";
 		ctx.beginPath();
-		ctx.arc(x,y,5,0,Math.PI*2,true);
+		ctx.arc(x,y,radius,0,Math.PI*2,true);
 		ctx.closePath();
 		ctx.fill();
 
@@ -87,8 +96,10 @@ var Player = function(startX, startY) {
 	return {
 		getX: getX,
 		getY: getY,
+		getRadius: getRadius,
 		setX: setX,
 		setY: setY,
+		setRadius: setRadius,
 		update: update,
 		draw: draw
 	}

@@ -34,14 +34,23 @@ var Bullet = function(startX, startY, radians) {
 		return y;
 	};
 	
+	var getRadians = function() {
+		return radians;
+	};	
+	
 	var getRadius = function() {
 		return radius;
+	};
+
+	var setRadius = function(newRadius) {
+		radius = newRadius;
 	};
 	
 	var doStep = function() {
 		x += deltaX;
 		y += deltaY;
 
+		//collision
 		if (x < radius) {
 			deltaX = -deltaX;
 			x = 2 * (radius) - x;
@@ -57,6 +66,7 @@ var Bullet = function(startX, startY, radians) {
 			y = 2 * (constants.BATTLEFIELD_HEIGHT - radius) - y;
 		}
 		
+		//просчет движения пуль производится чаще, чем отправка видимости (трассировки) [отдельный массив] поэтому разделяю. хотя наверное можно и прямо 
 		traceX = x;
 		traceY = y;
 				
@@ -66,12 +76,16 @@ var Bullet = function(startX, startY, radians) {
 	return {
 		getX: getX,
 		getY: getY,
-		getRadius:getRadius,
-		author:author,
+		getRadians: getRadians,//надо, например, для расчета точки соприкосновения с игроком
+		
+		getRadius: getRadius,
+		setRadius: setRadius,
+		
+		author: author,
 		traceX: traceX,
 		traceY: traceY,
 		traceRadius: traceRadius,
-		doStep:doStep
+		doStep: doStep
 	}
 };
 

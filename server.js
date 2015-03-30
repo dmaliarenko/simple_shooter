@@ -200,9 +200,14 @@ function move_bullets(){
 		players.forEach(collision);
 		function collision(player, j, players) {
 				//console.log("player.getX(): "+ player.getX() + ' bullets[i].getX(): ' + bullets[i].getX());
+				
+			//delta individual (зависит от наклона)	THIS IS GEOMETRY!!! :)
+			var contact_deltaX	= Math.cos(bullets[i].getRadians()) * (player.getRadius() + bullets[i].getRadius());
+			var contact_deltaY = Math.sin(bullets[i].getRadians()) * (player.getRadius() + bullets[i].getRadius());
+							
 			if( ((typeof bullet_tracing !== 'undefined' && bullet_tracing.length > 0)) &&
-				((player.getX() <= (bullets[i].getX()+10)) && (player.getX() >= (bullets[i].getX()-10))) &&
-				((player.getY() <= (bullets[i].getY()+10)) && (player.getY() >= (bullets[i].getY()-10)))){
+				((player.getX() <= (bullets[i].getX()+contact_deltaX)) && (player.getX() >= (bullets[i].getX()-contact_deltaX))) &&
+				((player.getY() <= (bullets[i].getY()+contact_deltaY)) && (player.getY() >= (bullets[i].getY()-contact_deltaY)))){
 				
 				//for destroin bullet
 				//здесь сразу нельзя убить пулю (нельзя просто удалить с массива - т.к. мы в цикле: во-первых надо пройтись по всем остальным игрокам и сравнить с bullets[i].getX() например, во-вторых, нам надо продолжать дальше цикл по bullets.length)

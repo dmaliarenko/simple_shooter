@@ -2,9 +2,13 @@
 ** GAME PLAYER CLASS
 **************************************************/
 var Player = function(startX, startY) {
+	//подключаем константы
+	var constants = require(__dirname +'/public/js/constants.js');
+	
 	var x = startX,
 		y = startY,
-		id;
+		id,
+		radius = constants.PLAYER_RADIUS; //default radius
 
 	// Getters and setters
 	var getX = function() {
@@ -15,6 +19,10 @@ var Player = function(startX, startY) {
 		return y;
 	};
 
+	var getRadius = function() {
+		return radius;
+	};
+
 	var setX = function(newX) {
 		x = newX;
 	};
@@ -23,12 +31,20 @@ var Player = function(startX, startY) {
 		y = newY;
 	};
 
+	var setRadius = function(newRadius) {
+		radius = newRadius;
+	};
+
 	// Define which variables and methods can be accessed
 	return {
 		getX: getX,
 		getY: getY,
+		getRadius: getRadius,
+		
 		setX: setX,
 		setY: setY,
+		setRadius: setRadius,
+		
 		id: id
 	}
 };

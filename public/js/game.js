@@ -33,6 +33,7 @@ function init() {
 
 	// Initialise the local player
 	localPlayer = new Player(startX, startY);
+	console.log('localPlayer.getRadius: '+localPlayer.getRadius());
 
 	// Initialise socket connection
 	//socket = io.connect("http://localhost", {port: 1253, transports: ["websocket"]});
