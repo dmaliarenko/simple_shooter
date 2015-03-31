@@ -6,7 +6,7 @@ var Player = function(startX, startY) {
 		y = startY,
 		id,
 		radius = constants.PLAYER_RADIUS, //default radius
-		moveAmount = 3;
+		moveAmount = 5;
 	
 	// Getters and setters
 	var getX = function() {

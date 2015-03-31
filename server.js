@@ -160,13 +160,13 @@ function onNewPlayer(data) {
 	// Add new player to the players array
 	players.push(newPlayer);
 	
-	var active_clients = [];
+	/*var active_clients = [];
 	for (i = 0; i < io.sockets.sockets.length; i++) {
 		active_clients.push(io.sockets.sockets[i].id);
 	};
 	console.log('active_clients: ' + JSON.stringify(active_clients));
 	
-	/*//проверяем игроков - оставляем только активных
+	//проверяем игроков - оставляем только активных
 	players.forEach(face_control);
 	function face_control(player, j, players) {
 		if(active_clients.includes(player.id)){

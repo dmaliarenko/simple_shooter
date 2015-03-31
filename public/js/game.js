@@ -250,8 +250,10 @@ function onNewPlayer(data) {
 	// Initialise the new player
 	var newPlayer = new Player(data.x, data.y);
 	newPlayer.id = data.id;
-
-	var removePlayer = playerById(data.id);
+	
+	remotePlayers.push(newPlayer);
+	
+	/*var removePlayer = playerById(data.id);
 
 	// Player not found
 	if (!removePlayer) {
@@ -261,7 +263,7 @@ function onNewPlayer(data) {
 		remotePlayers.splice(remotePlayers.indexOf(removePlayer), 1);
 		//add new player
 		remotePlayers.push(newPlayer);	
-	};
+	};*/
 };
 
 // Move player
