@@ -60,7 +60,7 @@ var Player = function(startX, startY) {
 	};
 	
 	// Update player position
-	var update = function(keys) {
+	var update = function(keys,remotePlayers) {
 		// Previous position
 		var prevX = x,
 			prevY = y;
@@ -100,6 +100,25 @@ var Player = function(startX, startY) {
 				//console.log('outer field');
 			}
 		};
+		
+		
+		//ищем столкновение с коллегами
+		remotePlayers.forEach(collision);
+		function collision(remotePlayer, j, remotePlayers) {
+				
+			//THIS IS GEOMETRY!!! :)
+			//находим расстояние между центрами
+			var d = Math.sqrt(Math.pow(Math.abs(remotePlayer.getX() - x),2) + Math.pow(Math.abs(remotePlayer.getY() - y),2));
+
+			//находим расстояние при контакте
+			var contact_d = remotePlayer.getRadius() + radius;
+									
+			if( d < contact_d){
+				//отменяем ход
+				x = prevX;
+				y = prevY;
+			};	
+		}		
 
 		return (prevX != x || prevY != y) ? true : false;
 	};
