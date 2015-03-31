@@ -30,7 +30,9 @@ var Player = function(startX, startY) {
 	};
 
 	var setRadius = function(newRadius) {
-		radius = newRadius;
+		if(newRadius <= PLAYER_maxRADIUS && newRadius >= PLAYER_minRADIUS){
+			radius = newRadius;			
+		}
 	};
 	
 	// Update player position
@@ -80,16 +82,12 @@ var Player = function(startX, startY) {
 
 	// Draw player
 	var draw = function(ctx) {
-		ctx.beginPath();
-		//ctx.fillStyle = 'black';
-		//ctx.fillRect(x-5, y-5, 10, 10);
-		
+		ctx.beginPath();	
 		ctx.fillStyle = "black";
 		ctx.beginPath();
 		ctx.arc(x,y,radius,0,Math.PI*2,true);
 		ctx.closePath();
 		ctx.fill();
-
 	};
 
 	// Define which variables and methods can be accessed

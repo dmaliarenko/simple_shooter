@@ -22,6 +22,9 @@ function init() {
 	canvas.width = constants.BATTLEFIELD_WIDTH;
 	canvas.height = constants.BATTLEFIELD_HEIGHT;
 
+	// Wipe the canvas clean
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+
 	// Initialise keyboard controls
 	keys = new Keys();
 
@@ -65,6 +68,9 @@ var setEventHandlers = function() {
 
 	// Socket connection successful
 	socket.on("connect", onSocketConnected);
+
+	// Socket connection get new id
+	socket.on("new id", setNewID);
 
 	// Socket disconnection
 	socket.on("disconnect", onSocketDisconnect);
@@ -228,9 +234,19 @@ function onSocketConnected() {
 	socket.emit("new player", {x: localPlayer.getX(), y: localPlayer.getY()});
 };
 
+function setNewID(data) {
+	localPlayer.id = data.id;
+	console.log('my id: ' + localPlayer.id + ' now;');
+}
+
 // Socket disconnected
 function onSocketDisconnect() {
 	console.log("Disconnected from socket server");
+
+	// Wipe the canvas clean
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	init();
+	animate();	
 };
 
 // New player
@@ -265,6 +281,7 @@ function onUpdateBullets(data) {
 	
 	//здесь убить все предыдущие пули
 	remoteBullets=[];
+	update();
 	
 	var bulletlist = JSON.parse(data);
 	console.log(data);

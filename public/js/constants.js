@@ -15,8 +15,9 @@
 	var BULLET_STEP = 15;
 	
 	//PLAYER
-	var PLAYER_RADIUS = 30; //default
-	 
+	var PLAYER_RADIUS = 15; //default
+	var PLAYER_minRADIUS = 2;
+	var PLAYER_maxRADIUS = 40; 
 
 //code for server side
 	//BATTLEFIELD
@@ -29,5 +30,7 @@
 	
 	//PLAYER
 	exports.PLAYER_RADIUS = PLAYER_RADIUS;
+	exports.PLAYER_minRADIUS = PLAYER_minRADIUS;
+	exports.PLAYER_maxRADIUS = PLAYER_maxRADIUS;
 	
 })(typeof exports === 'undefined'? this['constants']={}: exports);

@@ -133,7 +133,8 @@ function onNewPlayer(data) {
 	// Create a new player
 	var newPlayer = new Player(data.x, data.y);
 	newPlayer.id = this.id;
-
+	this.emit("new id", {id: this.id});
+	
 	// Broadcast new player to connected socket clients
 	this.broadcast.emit("new player", {id: newPlayer.id, x: newPlayer.getX(), y: newPlayer.getY()});
 
@@ -157,6 +158,7 @@ function onNewBullet(data) {
 		
 	// Add new bullet to the bullets array
 	bullets.push(newBullet);
+	tracing();
 	//console.log(JSON.stringify(bullets));	
 };
 
@@ -191,13 +193,11 @@ function move_bullets(){
 	//bullets physics
 	for (var i = 0; i < bullets.length; i++) {
 		
-		//bullets[i].doStep();
+		//keep walking;
 		bullets[i].doStep();
-		//bullet_tracing.push({author: bullets[i].author, x: bullets[i].getX(), y: bullets[i].getY()});
 		
 		players.forEach(collision);
 		function collision(player, j, players) {
-				//console.log("player.getX(): "+ player.getX() + ' bullets[i].getX(): ' + bullets[i].getX());
 				
 			//THIS IS GEOMETRY!!! :)
 			//находим расстояние между центрами
@@ -215,13 +215,25 @@ function move_bullets(){
 				dead_bullet_list.push(i);
 				
 				//тут бы надо фиксировать death; suicide; frag
+				if(player.id == bullets[i].author){
+					//suicide
+					io.sockets.emit("transform player", {id: player.id, status: 'suicide'});
+					
+					console.log('player: ' + player.id + ' suicide :(');				
+				}else{
+					io.sockets.emit("transform player", {id: bullets[i].author, status: 'frag'});
+					io.sockets.emit("transform player", {id: player.id, status: 'death'});
+					
+					console.log('player: ' + bullets[i].author + ' get frag;');
+					console.log('player: ' + player.id + ' get death;');			
+				}
 				
 				//это удалить: чисто для тестирования
-				var d = new Date();
-				console.log("попадание: "+d.getTime());
+				//var d = new Date();
+				//console.log("попадание: "+d.getTime());
 			};	
 		}				
-		//console.log('bullets[i].doStep: x: ' + ball.getX() + ' y: '+ ball.getY());		
+		tracing();		
 	};
 	
 	//exterminatus foreach bullet in dead_bullet_list
@@ -246,11 +258,13 @@ function move_bullets(){
 	}
 	
 	function update_tracing(){
-		setTimeout(update_tracing, 33);
-		tracing();			
+		setTimeout(update_tracing, 60);
+		tracing();
+					
 		// Broadcast updated bullets position to connected socket clients
 		//only if exist
-		if (typeof bullet_tracing !== 'undefined' && bullet_tracing.length > 0) {		
+		if (typeof bullet_tracing !== 'undefined' && bullet_tracing.length > 0) {
+					
 			io.sockets.emit("update bullets", JSON.stringify(bullet_tracing));    
 		}
 	}

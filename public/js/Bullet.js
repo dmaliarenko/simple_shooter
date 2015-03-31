@@ -26,9 +26,7 @@ var Bullet = function(startX, startY) {
 
 	// Draw bullet
 	var draw = function(ctx) {
-		//ctx.fillStyle="red";
-		//ctx.fillRect(x-2, y-2, 4, 4);
-		
+	
 		ctx.fillStyle = "red";
 		ctx.beginPath();
 		ctx.arc(x,y,2,0,Math.PI*2,true);

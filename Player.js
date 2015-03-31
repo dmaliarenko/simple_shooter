@@ -8,6 +8,9 @@ var Player = function(startX, startY) {
 	var x = startX,
 		y = startY,
 		id,
+		
+		suicide = 0, death = 0, frag = 0, //status
+		
 		radius = constants.PLAYER_RADIUS; //default radius
 
 	// Getters and setters
@@ -23,6 +26,18 @@ var Player = function(startX, startY) {
 		return radius;
 	};
 
+	var getSuicide = function() {
+		return suicide;
+	};
+
+	var getDeath = function() {
+		return death;
+	};
+
+	var getFrag = function() {
+		return frag;
+	};
+			
 	var setX = function(newX) {
 		x = newX;
 	};
@@ -32,9 +47,28 @@ var Player = function(startX, startY) {
 	};
 
 	var setRadius = function(newRadius) {
-		radius = newRadius;
+		if(newRadius <= PLAYER_maxRADIUS && newRadius >= PLAYER_minRADIUS){
+			radius = newRadius;			
+		}
 	};
 
+	var setStatus = function(status) {
+		switch (status) {
+			case 'suicide':
+				suicide++;
+				setRadius(getRadius()-1);
+				break;
+			case 'death':
+				death++;
+				setRadius(getRadius()-1);
+				break;
+			case 'frag':
+				frag++;
+				setRadius(getRadius()+1);
+				break;
+		}
+	};
+	
 	// Define which variables and methods can be accessed
 	return {
 		getX: getX,
