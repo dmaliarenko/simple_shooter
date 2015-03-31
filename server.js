@@ -145,7 +145,7 @@ function onNewPlayer(data) {
 	for (i = 0; i < players.length; i++) {
 		existingPlayer = players[i];
 		if(existingPlayer.id != this.id){
-			this.emit("new player", {id: existingPlayer.id, x: existingPlayer.getX(), y: existingPlayer.getY()});		
+			this.emit("new player", {id: existingPlayer.id, x: existingPlayer.getX(), y: existingPlayer.getY(), radius: existingPlayer.getRadius(), status: existingPlayer.getStatus()});		
 		}else{
 			//отметить на удаление все уже существующие в players
 			 Player_deadlist.push(i);

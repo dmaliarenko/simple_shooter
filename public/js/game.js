@@ -28,8 +28,8 @@ function init() {
 	// Calculate a random start position for the local player
 	// The minus 5 (half a player size) stops the player being
 	// placed right on the egde of the screen
-	var startX = Math.round(Math.random()*(canvas.width-5)),
-		startY = Math.round(Math.random()*(canvas.height-5));
+	var startX = constants.PLAYER_RADIUS + Math.round(Math.random()*(canvas.width - 2 * constants.PLAYER_RADIUS)),
+		startY = constants.PLAYER_RADIUS + Math.round(Math.random()*(canvas.height - 2 * constants.PLAYER_RADIUS));
 
 	// Initialise the local player
 	localPlayer = new Player(startX, startY);
@@ -257,7 +257,19 @@ function onNewPlayer(data) {
 	// Initialise the new player
 	var newPlayer = new Player(data.x, data.y);
 	newPlayer.id = data.id;
+	newPlayer.setRadius(data.radius);
+
+	console.log('data.status.suicide: ' + JSON.stringify(data.status));
 	
+	newPlayer.setStatus(data.status);
+	/*var suicide = data.status.suicide;
+	var death = data.status.death;
+	var frag = data.status.frag;
+	
+	newPlayer.setSuicide(suicide);
+	newPlayer.setDeath(death);
+	newPlayer.setFrag(frag);*/
+
 	remotePlayers.push(newPlayer);
 	
 	/*var removePlayer = playerById(data.id);

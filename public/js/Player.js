@@ -7,7 +7,7 @@ var Player = function(startX, startY) {
 		id,
 		suicide = 0, death = 0, frag = 0, //status
 		radius = constants.PLAYER_RADIUS, //default radius
-		moveAmount = 5;
+		moveAmount = 4;
 	
 	// Getters and setters
 	var getX = function() {
@@ -35,9 +35,22 @@ var Player = function(startX, startY) {
 			radius = newRadius;			
 		}
 	};
-	
-	var setStatus= function(status) {
-		suicide = status.suicide;
+
+	var setSuicide = function(data) {
+		suicide = data +0;
+	};
+
+	var setDeath = function(data) {
+		death = data+0;
+	};
+
+	var setFrag = function(data) {
+		frag = data+0;
+	};
+		
+	var setStatus = function(status) {
+		
+		suicide = status['suicide'];
 		death = status.death;
 		frag =status.frag;
 	};
@@ -117,6 +130,7 @@ var Player = function(startX, startY) {
 				//отменяем ход
 				x = prevX;
 				y = prevY;
+				//хотя тут можно откорректировать ход точно до контакта
 			};	
 		}		
 
@@ -142,6 +156,10 @@ var Player = function(startX, startY) {
 		setY: setY,
 		setRadius: setRadius,
 		setStatus: setStatus,
+		setSuicide: setSuicide,
+		setDeath: setDeath,
+		setFrag: setFrag,
+		
 		updateStatus:updateStatus,
 		update: update,
 		draw: draw
