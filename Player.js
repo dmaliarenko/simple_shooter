@@ -8,10 +8,13 @@ var Player = function(startX, startY) {
 	var x = startX,
 		y = startY,
 		id,
-		
-		suicide = 0, death = 0, frag = 0, //status
+		score ={},
 		
 		radius = constants.PLAYER_RADIUS; //default radius
+		
+	score.suicide = 0;
+	score.death	= 0;
+	score.frag	= 0;
 
 	// Getters and setters
 	var getX = function() {
@@ -26,8 +29,10 @@ var Player = function(startX, startY) {
 		return radius;
 	};
 	
-	var getStatus = function() {
-		return {suicide: suicide, death: death, frag: frag};
+	var getScore = function() {
+		console.log("server score['suicide']" + score['suicide']);
+		console.log('server player JSON.stringify(score): ' + JSON.stringify(score));
+		return JSON.stringify(score);
 	};
 				
 	var setX = function(newX) {
@@ -44,25 +49,25 @@ var Player = function(startX, startY) {
 		}
 	};
 	
-	var setStatus= function(status) {
-		suicide = status.suicide;
-		death = status.death;
-		frag =status.frag;
+	var setScore= function(data) {
+		console.log('setScore data: ' + data);	
+		score= JSON.parse(data);
+
 	};
 	
-	var updateStatus = function(status) {
-		switch (status) {
+	var updateScore = function(data) {
+		switch (data) {
 			case 'suicide':
-				suicide++;
-				setRadius(getRadius()-1);
+				score.suicide = score.suicide + 1;
+				setRadius(radius-1);
 				break;
 			case 'death':
-				death++;
-				setRadius(getRadius()-1);
+				score.death = score.death + 1;
+				setRadius(radius-1);
 				break;
 			case 'frag':
-				frag++;
-				setRadius(getRadius()+1);
+				score.frag = score.frag + 1;
+				setRadius(radius+1);
 				break;
 		}
 	};
@@ -72,13 +77,13 @@ var Player = function(startX, startY) {
 		getX: getX,
 		getY: getY,
 		getRadius: getRadius,
-		getStatus: getStatus,
+		getScore: getScore,
 		
 		setX: setX,
 		setY: setY,
 		setRadius: setRadius,
-		setStatus: setStatus,
-		updateStatus: updateStatus,
+		setScore: setScore,
+		updateScore: updateScore,
 		
 		id: id
 	}

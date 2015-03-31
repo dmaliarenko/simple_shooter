@@ -133,10 +133,14 @@ function onNewPlayer(data) {
 	// Create a new player
 	var newPlayer = new Player(data.x, data.y);
 	newPlayer.id = this.id;
+	newPlayer.setRadius(data.radius);
+	newPlayer.setScore(data.score);
+	
 	this.emit("new id", {id: this.id});
 	
 	// Broadcast new player to connected socket clients
-	this.broadcast.emit("new player", {id: newPlayer.id, x: newPlayer.getX(), y: newPlayer.getY()});
+	this.broadcast.emit("new player", {id: newPlayer.id, x: newPlayer.getX(), y: newPlayer.getY(), radius: newPlayer.getRadius(), score: newPlayer.getScore()});
+	console.log('new player score: ' + newPlayer.getScore());
 
 	// Send existing players to the new player
 	var i, existingPlayer;
@@ -145,7 +149,7 @@ function onNewPlayer(data) {
 	for (i = 0; i < players.length; i++) {
 		existingPlayer = players[i];
 		if(existingPlayer.id != this.id){
-			this.emit("new player", {id: existingPlayer.id, x: existingPlayer.getX(), y: existingPlayer.getY(), radius: existingPlayer.getRadius(), status: existingPlayer.getStatus()});		
+			this.emit("new player", {id: existingPlayer.id, x: existingPlayer.getX(), y: existingPlayer.getY(), radius: existingPlayer.getRadius(), score: existingPlayer.getScore()});		
 		}else{
 			//отметить на удаление все уже существующие в players
 			 Player_deadlist.push(i);
@@ -160,21 +164,45 @@ function onNewPlayer(data) {
 	// Add new player to the players array
 	players.push(newPlayer);
 	
-	/*var active_clients = [];
+	var active_clients = [];
 	for (i = 0; i < io.sockets.sockets.length; i++) {
-		active_clients.push(io.sockets.sockets[i].id);
+		var active_id = io.sockets.sockets[i].id;
+		active_clients.push(active_id);
 	};
+	
 	console.log('active_clients: ' + JSON.stringify(active_clients));
 	
+	//эт не мое, но круто :)
+	var indexOf = function(needle) {
+		if(typeof Array.prototype.indexOf === 'function') {
+			indexOf = Array.prototype.indexOf;
+		} else {
+			indexOf = function(needle) {
+				var i = -1, index = -1;
+
+				for(i = 0; i < this.length; i++) {
+					if(this[i] === needle) {
+						index = i;
+						break;
+					}
+				}
+				return index;
+			};
+		}
+		return indexOf.call(this, needle);
+	};	
+						
 	//проверяем игроков - оставляем только активных
 	players.forEach(face_control);
 	function face_control(player, j, players) {
-		if(active_clients.includes(player.id)){
+		var index = indexOf.call(active_clients, player.id);
+		if(index!= -1){
 			console.log(player.id + ' in game'); 
 		}else{
 			console.log(player.id + " not connected");
 		}	
-	}*/	
+	}
+
 };
 
 // New Bullet launch
@@ -246,8 +274,8 @@ function move_bullets(){
 				//тут бы надо фиксировать death; suicide; frag
 				if(player.id == bullets[i].author){
 					//suicide
-					player.updateStatus('suicide');
-					io.sockets.emit("set status", {id: player.id, status: player.getStatus(), radius: player.getRadius()});
+					player.updateScore('suicide');
+					io.sockets.emit("set score", {id: player.id, score: player.getScore(), radius: player.getRadius()});
 					
 					console.log('player: ' + player.id + ' suicide :(');
 				}else{
@@ -256,13 +284,14 @@ function move_bullets(){
 					if (!playerById(bullets[i].author)) {
 						util.log("bullet owner not found: "+bullets[i].author);
 					}else{
-						playerById(bullets[i].author).updateStatus('frag');
-						io.sockets.emit("set status", {id: bullets[i].author, status: playerById(bullets[i].author).getStatus(), radius: playerById(bullets[i].author).getRadius()});					
+						playerById(bullets[i].author).updateScore('frag');
+						io.sockets.emit("set score", {id: bullets[i].author, score: playerById(bullets[i].author).getScore(), radius: playerById(bullets[i].author).getRadius()});					
+						console.log('"bullet owner: ' + bullets[i].author + '; score: ' + playerById(bullets[i].author).getScore());
 					};
 					
 					//жертве -  статус death			
-					player.updateStatus('death');
-					io.sockets.emit("set status", {id: player.id, status: player.getStatus(), radius: player.getRadius()});
+					player.updateScore('death');
+					io.sockets.emit("set score", {id: player.id, score: player.getScore(), radius: player.getRadius()});
 					
 					console.log('player: ' + bullets[i].author + ' get frag;');
 					console.log('player: ' + player.id + ' get death;');			

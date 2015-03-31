@@ -33,7 +33,7 @@ function init() {
 
 	// Initialise the local player
 	localPlayer = new Player(startX, startY);
-	//console.log('localPlayer.getRadius: '+localPlayer.getRadius());
+	console.log('localPlayer.getScore: '+localPlayer.getScore());
 
 	// Initialise socket connection
 	//socket = io.connect("http://localhost", {port: 1253, transports: ["websocket"]});
@@ -85,10 +85,10 @@ var setEventHandlers = function() {
 	socket.on("update bullets", onUpdateBullets);
 	
 	// Player transform message received
-	socket.on("update status", onUpdateStatus);
+	socket.on("update score", onUpdateScore);
 	
 	// Player set status message received
-	socket.on("set status", onSetStatus);	
+	socket.on("set score", onSetScore);	
 	
 };
 
@@ -235,7 +235,8 @@ function onSocketConnected() {
 	//console.log("Connected"+ hostname());
 
 	// Send local player data to the game server
-	socket.emit("new player", {x: localPlayer.getX(), y: localPlayer.getY()});
+	socket.emit("new player", {x: localPlayer.getX(), y: localPlayer.getY(), radius: localPlayer.getRadius(), score: localPlayer.getScore()});
+	console.log("emit 'new player': " + localPlayer.getScore());
 };
 
 function setNewID(data) {
@@ -246,6 +247,8 @@ function setNewID(data) {
 // Socket disconnected
 function onSocketDisconnect() {
 	console.log("Disconnected from socket server");
+	localPlayer ={};
+	remotePlayers = [];
 	init();
 	animate();	
 };
@@ -259,9 +262,9 @@ function onNewPlayer(data) {
 	newPlayer.id = data.id;
 	newPlayer.setRadius(data.radius);
 
-	console.log('data.status.suicide: ' + JSON.stringify(data.status));
+	console.log('game onNewPlayer data.score: ' + data.score);
 	
-	newPlayer.setStatus(data.status);
+	newPlayer.setScore(data.score);
 	/*var suicide = data.status.suicide;
 	var death = data.status.death;
 	var frag = data.status.frag;
@@ -346,10 +349,10 @@ function onRemovePlayer(data) {
 };
 
 //transformPlayer
-function onUpdateStatus(data){
+function onUpdateScore(data){
 	
 	if(localPlayer.id == data.id){
-		localPlayer.updateStatus(data.status);
+		localPlayer.setScore(data.score);
 	}else{
 		var targerPlayer = playerById(data.id);
 
@@ -357,17 +360,19 @@ function onUpdateStatus(data){
 		if (!targerPlayer) {
 			console.log("Player not found: "+data.id);
 		}else{
-			targerPlayer.updateStatus(data.status);
+			targerPlayer.setScore(data.score);
 		};	
 	}
 }
 
 //onSetStatus
-function onSetStatus(data){
+function onSetScore(data){
 	
 	if(localPlayer.id == data.id){
 		localPlayer.setRadius(data.radius);
-		localPlayer.setStatus(data.status);
+
+		console.log('setStatus data.status: ' + data.score);
+		localPlayer.setScore(data.score);
 	}else{
 		var targerPlayer = playerById(data.id);
 
@@ -376,7 +381,7 @@ function onSetStatus(data){
 			console.log("Player not found: "+data.id);
 		}else{
 			targerPlayer.setRadius(data.radius);
-			targerPlayer.setStatus(data.status);			
+			targerPlayer.setScore(data.score);			
 		};	
 	}
 }
