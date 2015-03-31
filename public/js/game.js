@@ -33,7 +33,7 @@ function init() {
 
 	// Initialise the local player
 	localPlayer = new Player(startX, startY);
-	console.log('localPlayer.getRadius: '+localPlayer.getRadius());
+	//console.log('localPlayer.getRadius: '+localPlayer.getRadius());
 
 	// Initialise socket connection
 	//socket = io.connect("http://localhost", {port: 1253, transports: ["websocket"]});
@@ -207,7 +207,7 @@ function mouseFire(event){
 function fire(){
 	var fieldcoord = getOffset(document.getElementById('battlefield'));
 	
-	console.log('fire from: absX:'+(localPlayer.getX()+fieldcoord.left)+' absY: '+(localPlayer.getY()+ fieldcoord.top));
+	//console.log('fire from: absX:'+(localPlayer.getX()+fieldcoord.left)+' absY: '+(localPlayer.getY()+ fieldcoord.top));
 	//console.log('fieldcoord.top: ' + fieldcoord.top + ' fieldcoord.left: '+fieldcoord.left);	
 }
 
@@ -232,7 +232,7 @@ function onSocketConnected() {
 };
 
 function setNewID(data) {
-	//localPlayer.id = data.id;
+	localPlayer.id = data.id;
 	console.log('my id: ' + localPlayer.id + ' now;');
 }
 
@@ -289,7 +289,7 @@ function onUpdateBullets(data) {
 	update();
 	
 	var bulletlist = JSON.parse(data);
-	console.log(data);
+	//console.log(data);
 	
 	
 	bulletlist.forEach(create_bullet);
