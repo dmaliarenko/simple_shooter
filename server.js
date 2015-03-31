@@ -142,11 +142,23 @@ function onNewPlayer(data) {
 	var i, existingPlayer;
 	for (i = 0; i < players.length; i++) {
 		existingPlayer = players[i];
-		this.emit("new player", {id: existingPlayer.id, x: existingPlayer.getX(), y: existingPlayer.getY()});
+		if(existingPlayer.id != this.id){
+			this.emit("new player", {id: existingPlayer.id, x: existingPlayer.getX(), y: existingPlayer.getY()});		
+		}
 	};
 		
 	// Add new player to the players array
 	players.push(newPlayer);
+	
+	//проверяем игроков - оставляем только активных
+	players.forEach(face_control);
+	function face_control(player, j, players) {
+		if(io.sockets.sockets[player.id]!=undefined){
+			console.log(io.sockets.sockets[player.id] + ' in game'); 
+		}else{
+			console.log(player.id + " not connected");
+		}	
+	}	
 };
 
 // New Bullet launch
@@ -267,6 +279,13 @@ function move_bullets(){
 					
 			io.sockets.emit("update bullets", JSON.stringify(bullet_tracing));    
 		}
+		
+		/*var active_clients = [];
+		for (i = 0; i < io.sockets.sockets.length; i++) {
+			active_clients.push(io.sockets.sockets);
+		};*/
+		
+		//console.log('active_clients: ' + JSON.stringify(io.sockets.sockets, ["id"]));		
 	}
 /**************************************************
 ** GAME HELPER FUNCTIONS

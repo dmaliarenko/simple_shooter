@@ -22,9 +22,6 @@ function init() {
 	canvas.width = constants.BATTLEFIELD_WIDTH;
 	canvas.height = constants.BATTLEFIELD_HEIGHT;
 
-	// Wipe the canvas clean
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-
 	// Initialise keyboard controls
 	keys = new Keys();
 
@@ -235,16 +232,13 @@ function onSocketConnected() {
 };
 
 function setNewID(data) {
-	localPlayer.id = data.id;
+	//localPlayer.id = data.id;
 	console.log('my id: ' + localPlayer.id + ' now;');
 }
 
 // Socket disconnected
 function onSocketDisconnect() {
 	console.log("Disconnected from socket server");
-
-	// Wipe the canvas clean
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	init();
 	animate();	
 };
@@ -257,8 +251,17 @@ function onNewPlayer(data) {
 	var newPlayer = new Player(data.x, data.y);
 	newPlayer.id = data.id;
 
-	// Add new player to the remote players array
-	remotePlayers.push(newPlayer);
+	var removePlayer = playerById(data.id);
+
+	// Player not found
+	if (!removePlayer) {
+		remotePlayers.push(newPlayer);
+	}else{
+		// Remove old player from array
+		remotePlayers.splice(remotePlayers.indexOf(removePlayer), 1);
+		//add new player
+		remotePlayers.push(newPlayer);	
+	};
 };
 
 // Move player
