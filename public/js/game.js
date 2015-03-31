@@ -83,6 +83,13 @@ var setEventHandlers = function() {
 
 	// Bullets update message received
 	socket.on("update bullets", onUpdateBullets);
+	
+	// Player transform message received
+	socket.on("update status", onUpdateStatus);
+	
+	// Player set status message received
+	socket.on("set status", onSetStatus);	
+	
 };
 
 //for absolute element position
@@ -326,6 +333,41 @@ function onRemovePlayer(data) {
 	remotePlayers.splice(remotePlayers.indexOf(removePlayer), 1);
 };
 
+//transformPlayer
+function onUpdateStatus(data){
+	
+	if(localPlayer.id == data.id){
+		localPlayer.updateStatus(data.status);
+	}else{
+		var targerPlayer = playerById(data.id);
+
+		// Player not found
+		if (!targerPlayer) {
+			console.log("Player not found: "+data.id);
+		}else{
+			targerPlayer.updateStatus(data.status);
+		};	
+	}
+}
+
+//onSetStatus
+function onSetStatus(data){
+	
+	if(localPlayer.id == data.id){
+		localPlayer.setRadius(data.radius);
+		localPlayer.setStatus(data.status);
+	}else{
+		var targerPlayer = playerById(data.id);
+
+		// Player not found
+		if (!targerPlayer) {
+			console.log("Player not found: "+data.id);
+		}else{
+			targerPlayer.setRadius(data.radius);
+			targerPlayer.setStatus(data.status);			
+		};	
+	}
+}
 
 /**************************************************
 ** GAME ANIMATION LOOP

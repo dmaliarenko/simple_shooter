@@ -25,19 +25,11 @@ var Player = function(startX, startY) {
 	var getRadius = function() {
 		return radius;
 	};
-
-	var getSuicide = function() {
-		return suicide;
+	
+	var getStatus = function() {
+		return {suicide: suicide, death: death, frag: frag};
 	};
-
-	var getDeath = function() {
-		return death;
-	};
-
-	var getFrag = function() {
-		return frag;
-	};
-			
+				
 	var setX = function(newX) {
 		x = newX;
 	};
@@ -47,12 +39,18 @@ var Player = function(startX, startY) {
 	};
 
 	var setRadius = function(newRadius) {
-		if(newRadius <= PLAYER_maxRADIUS && newRadius >= PLAYER_minRADIUS){
+		if(newRadius <= constants.PLAYER_maxRADIUS && newRadius >= constants.PLAYER_minRADIUS){
 			radius = newRadius;			
 		}
 	};
-
-	var setStatus = function(status) {
+	
+	var setStatus= function(status) {
+		suicide = status.suicide;
+		death = status.death;
+		frag =status.frag;
+	};
+	
+	var updateStatus = function(status) {
 		switch (status) {
 			case 'suicide':
 				suicide++;
@@ -74,10 +72,13 @@ var Player = function(startX, startY) {
 		getX: getX,
 		getY: getY,
 		getRadius: getRadius,
+		getStatus: getStatus,
 		
 		setX: setX,
 		setY: setY,
 		setRadius: setRadius,
+		setStatus: setStatus,
+		updateStatus: updateStatus,
 		
 		id: id
 	}

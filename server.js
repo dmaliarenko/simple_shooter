@@ -242,15 +242,27 @@ function move_bullets(){
 				//вносим пулю в список для уничтожения
 				dead_bullet_list.push(i);
 				
+				
 				//тут бы надо фиксировать death; suicide; frag
 				if(player.id == bullets[i].author){
 					//suicide
-					io.sockets.emit("transform player", {id: player.id, status: 'suicide'});
+					player.updateStatus('suicide');
+					io.sockets.emit("set status", {id: player.id, status: player.getStatus(), radius: player.getRadius()});
 					
-					console.log('player: ' + player.id + ' suicide :(');				
+					console.log('player: ' + player.id + ' suicide :(');
 				}else{
-					io.sockets.emit("transform player", {id: bullets[i].author, status: 'frag'});
-					io.sockets.emit("transform player", {id: player.id, status: 'death'});
+
+					//находим собственника пули и присвоим ему frag
+					if (!playerById(bullets[i].author)) {
+						util.log("bullet owner not found: "+bullets[i].author);
+					}else{
+						playerById(bullets[i].author).updateStatus('frag');
+						io.sockets.emit("set status", {id: bullets[i].author, status: playerById(bullets[i].author).getStatus(), radius: playerById(bullets[i].author).getRadius()});					
+					};
+					
+					//жертве -  статус death			
+					player.updateStatus('death');
+					io.sockets.emit("set status", {id: player.id, status: player.getStatus(), radius: player.getRadius()});
 					
 					console.log('player: ' + bullets[i].author + ' get frag;');
 					console.log('player: ' + player.id + ' get death;');			

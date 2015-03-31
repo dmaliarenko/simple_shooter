@@ -5,6 +5,7 @@ var Player = function(startX, startY) {
 	var x = startX,
 		y = startY,
 		id,
+		suicide = 0, death = 0, frag = 0, //status
 		radius = constants.PLAYER_RADIUS, //default radius
 		moveAmount = 5;
 	
@@ -30,8 +31,31 @@ var Player = function(startX, startY) {
 	};
 
 	var setRadius = function(newRadius) {
-		if(newRadius <= PLAYER_maxRADIUS && newRadius >= PLAYER_minRADIUS){
+		if(newRadius <= constants.PLAYER_maxRADIUS && newRadius >= constants.PLAYER_minRADIUS){
 			radius = newRadius;			
+		}
+	};
+	
+	var setStatus= function(status) {
+		suicide = status.suicide;
+		death = status.death;
+		frag =status.frag;
+	};
+	
+	var updateStatus = function(status) {
+		switch (status) {
+			case 'suicide':
+				suicide++;
+				setRadius(getRadius()-1);
+				break;
+			case 'death':
+				death++;
+				setRadius(getRadius()-1);
+				break;
+			case 'frag':
+				frag++;
+				setRadius(getRadius()+1);
+				break;
 		}
 	};
 	
@@ -98,6 +122,8 @@ var Player = function(startX, startY) {
 		setX: setX,
 		setY: setY,
 		setRadius: setRadius,
+		setStatus: setStatus,
+		updateStatus:updateStatus,
 		update: update,
 		draw: draw
 	}
