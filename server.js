@@ -140,25 +140,41 @@ function onNewPlayer(data) {
 
 	// Send existing players to the new player
 	var i, existingPlayer;
+	var Player_deadlist = [];
+	
 	for (i = 0; i < players.length; i++) {
 		existingPlayer = players[i];
 		if(existingPlayer.id != this.id){
 			this.emit("new player", {id: existingPlayer.id, x: existingPlayer.getX(), y: existingPlayer.getY()});		
+		}else{
+			//отметить на удаление все уже существующие в players
+			 Player_deadlist.push(i);
 		}
 	};
-		
+	
+	//удалить мертвых
+	for (i = 0; i < Player_deadlist.length; i++) {
+		players.splice(Player_deadlist[i], 1);
+	}
+	
 	// Add new player to the players array
 	players.push(newPlayer);
 	
-	//проверяем игроков - оставляем только активных
+	var active_clients = [];
+	for (i = 0; i < io.sockets.sockets.length; i++) {
+		active_clients.push(io.sockets.sockets[i].id);
+	};
+	console.log('active_clients: ' + JSON.stringify(active_clients));
+	
+	/*//проверяем игроков - оставляем только активных
 	players.forEach(face_control);
 	function face_control(player, j, players) {
-		if(io.sockets.sockets[player.id]!=undefined){
-			console.log(io.sockets.sockets[player.id] + ' in game'); 
+		if(active_clients.includes(player.id)){
+			console.log(player.id + ' in game'); 
 		}else{
 			console.log(player.id + " not connected");
 		}	
-	}	
+	}*/	
 };
 
 // New Bullet launch
@@ -282,7 +298,7 @@ function move_bullets(){
 		
 		/*var active_clients = [];
 		for (i = 0; i < io.sockets.sockets.length; i++) {
-			active_clients.push(io.sockets.sockets);
+			active_clients.push(io.sockets.sockets.id);
 		};*/
 		
 		//console.log('active_clients: ' + JSON.stringify(io.sockets.sockets, ["id"]));		
